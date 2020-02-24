@@ -19,11 +19,7 @@ class Game(object):
                 for p in curve:
                     t_curve.append(vec2d(p[0], p[1]))
                 self.track.append(t_curve)
-        A = (0, 100)
-        B = (100, 100)
-        C = (500, 200)
-        D = (500, 300)
-        print(self.line_intersection((A, B), (C, D)))
+        self.image = pygame.image.load("car.png").convert_alpha()
 
     def parse_events(self):
         for event in pygame.event.get():
@@ -38,6 +34,8 @@ class Game(object):
                 continue
             b_points = compute_bezier_points([(x.x, x.y) for x in curve])
             pygame.draw.lines(self.screen, pygame.Color("red"), False, b_points, 2)
+
+        self.screen.blit(self.image, (0, 0))
 
         pygame.display.flip()
 
