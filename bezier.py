@@ -25,7 +25,7 @@ X, Y, Z = 0, 1, 2
 
 def compute_bezier_points(vertices, numPoints=None):
     if numPoints is None:
-        numPoints = 30
+        numPoints = 4
 
     result = []
 
@@ -95,6 +95,10 @@ def main():
     control_points = [vec2d(100, 100), vec2d(150, 500), vec2d(450, 500), vec2d(500, 150)]
     curves.append(control_points)
 
+    reward_control_points = [vec2d(0, 0), vec2d(10, 10)]
+    rewards = []
+    rewards.append(reward_control_points)
+
     ### The currently selected point
     selected = None
 
@@ -121,9 +125,19 @@ def main():
                     f = open("track2.json", "w")
                     f.write(data)
                     f.close()
+                    all_rewards = []
+                    for line in rewards:
+                        this_reward = []
+                        for point in line:
+                            this_reward.append((point.x, point.y))
+                        all_rewards.append(this_reward)
+                    data2 = json.dumps(all_rewards)
+                    f = open("reward_gates2.json", "w")
+                    f.write(data2)
+                    f.close()
                     running = False
                 elif event.key == K_l:
-                    with open('track.json', 'r') as inf:
+                    with open('track2.json', 'r') as inf:
                         temp_curves = eval(inf.read())
                         curves = []
                         for curve in temp_curves:
@@ -131,11 +145,25 @@ def main():
                             for p in curve:
                                 t_curve.append(vec2d(p[0], p[1]))
                             curves.append(t_curve)
+                    with open('reward_gates2.json', 'r') as inf:
+                        temp_curves = eval(inf.read())
+                        rewards = []
+                        for line in temp_curves:
+                            t_curve = []
+                            for p in line:
+                                t_curve.append(vec2d(p[0], p[1]))
+                            rewards.append(t_curve)
             elif event.type == MOUSEBUTTONDOWN and event.button == 1:
                 for curve in curves:
                     for p in curve:
                         if abs(p.x - event.pos[X]) < 10 and abs(p.y - event.pos[Y]) < 10:
                             selected = p
+            elif event.type == MOUSEBUTTONDOWN and event.button == 2:
+                if len(rewards[-1]) < 2:
+                    rewards[-1].append(vec2d(event.pos[X], event.pos[Y]))
+                else:
+                    new_list = [vec2d(event.pos[X], event.pos[Y])]
+                    rewards.append(new_list)
             elif event.type == MOUSEBUTTONDOWN and event.button == 3:
                 if len(curves[-1]) < 4:
                     curves[-1].append(vec2d(event.pos[X], event.pos[Y]))
@@ -162,6 +190,11 @@ def main():
                     pygame.draw.circle(screen, blue, (int(p.x), int(p.y)), 4)
 
         if display_lines:
+            for line in rewards:
+                for p in line:
+                    pygame.draw.circle(screen, green, (int(p.x), int(p.y)), 4)
+
+        if display_lines:
             for curve in curves:
                 ### Draw control "lines"
                 if len(curve) < 2:
@@ -174,6 +207,11 @@ def main():
                 continue
             b_points = compute_bezier_points([(x.x, x.y) for x in curve])
             pygame.draw.lines(screen, pygame.Color("red"), False, b_points, 2)
+
+        for line in rewards:
+            if len(line) < 2:
+                continue
+            pygame.draw.lines(screen, pygame.Color("green"), False, ((line[0].x, line[0].y), (line[1].x, line[1].y)), 2)
 
         ### Flip screen
         pygame.display.flip()
