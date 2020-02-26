@@ -7,8 +7,8 @@ class Robot(object):
 
     def __init__(self):
         self.num_actions = 4
-        self.epsilon = 0.05
-        self.alpha = 0.85
+        self.epsilon = 0.1
+        self.alpha = 0.9
         self.gamma = 0.9
 
         self.q = {}

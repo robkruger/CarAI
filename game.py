@@ -51,7 +51,7 @@ class Game(object):
         self.robot = r
         self.reward = -0.1
         self.reset = False
-        self.draw_game = True
+        self.draw_mode = 0
         self.detected_points = []
         self.rect = None
         self.shutdown = False
@@ -59,7 +59,7 @@ class Game(object):
 
     def parse_events(self):
         keys = pygame.key.get_pressed()
-        if self.draw_game:
+        if self.draw_mode != 4:
             self.clock.tick(100)
         else:
             self.clock.tick()
@@ -69,15 +69,10 @@ class Game(object):
                 self.running = False
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RETURN:
-                    self.draw_game = not self.draw_game
+                    self.draw_mode = (self.draw_mode + 1) % 6
+                    print("print drawmode: ", self.draw_mode)
                 if event.key == pygame.K_s:
-                    for state in self.robot.q:
-                        for i in range(len(self.robot.q[state])):
-                            self.robot.q[state][i] = round(self.robot.q[state][i], 3)
-                    data = json.dumps(self.robot.q)
-                    f = open("q.json", "w")
-                    f.write(data)
-                    f.close()
+                    self.save()
                     self.running = False
                     self.shutdown = True
 
@@ -186,29 +181,34 @@ class Game(object):
     def draw(self):
         self.screen.fill((100, 100, 100))
 
-        for curve in self.track:
-            if len(curve) < 4:
-                continue
-            b_points = compute_bezier_points([(x.x, x.y) for x in curve])
-            pygame.draw.lines(self.screen, pygame.Color("red"), False, b_points, 2)
+        if self.draw_mode < 4:
+            for curve in self.track:
+                if len(curve) < 4:
+                    continue
+                b_points = compute_bezier_points([(x.x, x.y) for x in curve])
+                pygame.draw.lines(self.screen, pygame.Color("red"), False, b_points, 2)
 
         self.screen.blit(self.car_image, (self.car.x + self.rect[0], self.car.y + self.rect[1]))
 
-        pygame.draw.lines(self.screen, pygame.Color("white"), False, self.finish_line, 2)
+        if self.draw_mode < 3:
+            pygame.draw.lines(self.screen, pygame.Color("white"), False, self.finish_line, 2)
 
-        for checkpoint in self.checkpoints:
-            pygame.draw.lines(self.screen, (130, 130, 130), False, checkpoint, 2)
+        if self.draw_mode < 3:
+            for checkpoint in self.checkpoints:
+                pygame.draw.lines(self.screen, (130, 130, 130), False, checkpoint, 2)
 
-        for line in self.hit_box:
-            pygame.draw.lines(self.screen, self.color, False, line, 2)
+        if self.draw_mode < 1:
+            for line in self.hit_box:
+                pygame.draw.lines(self.screen, self.color, False, line, 2)
 
-        for point in self.detection_lines_to_draw:
-            if point == "n":
-                continue
-            pygame.draw.lines(self.screen, self.color, False,
-                              [(self.car.x + self.rect[0] + self.rect[2] / 2,
-                                self.car.y + self.rect[1] + self.rect[3] / 2),
-                               (point[0], point[1])], 2)
+        if self.draw_mode < 2:
+            for point in self.detection_lines_to_draw:
+                if point == "n":
+                    continue
+                pygame.draw.lines(self.screen, self.color, False,
+                                  [(self.car.x + self.rect[0] + self.rect[2] / 2,
+                                    self.car.y + self.rect[1] + self.rect[3] / 2),
+                                   (point[0], point[1])], 2)
 
         self.robot.update(self.reward, self.detected_points)
 
@@ -244,3 +244,12 @@ class Game(object):
         x = det(d, xdiff) / div
         y = det(d, ydiff) / div
         return int(x + 0.5), int(y + 0.5)
+
+    def save(self):
+        for state in self.robot.q:
+            for i in range(len(self.robot.q[state])):
+                self.robot.q[state][i] = round(self.robot.q[state][i], 3)
+        data = json.dumps(self.robot.q)
+        f = open("q.json", "w")
+        f.write(data)
+        f.close()
