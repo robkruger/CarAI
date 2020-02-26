@@ -1,6 +1,4 @@
 from __future__ import division
-import sympy
-from sympy.geometry import *
 
 import pygame
 import math
@@ -71,7 +69,7 @@ class Game(object):
                 if event.key == pygame.K_RETURN:
                     self.draw_mode = (self.draw_mode + 1) % 6
                     print("print drawmode: ", self.draw_mode)
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_p:
                     self.save()
                     self.running = False
                     self.shutdown = True
@@ -89,6 +87,12 @@ class Game(object):
             self.car.steer(1, delta)
         if keys[pygame.K_s] or action == 3:
             throttle = -70
+        if action == 4:
+            throttle = 100
+            self.car.steer(1, delta)
+        if action == 5:
+            throttle = 100
+            self.car.steer(-1, delta)
 
         self.car.update_speed(throttle, delta)
 
@@ -151,7 +155,7 @@ class Game(object):
 
         self.detection_lines = []
         for i in range(9):
-            ra = (i * 40) * math.pi / 180
+            ra = (i * 40) * math.pi / 180 + rotation_radian
             self.detection_lines.append(
                 [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
 
@@ -171,7 +175,7 @@ class Game(object):
                     if self.intersect_segment(line[0], line[1], b_points[i], b_points[i + 1]):
                         point = self.line_intersection(line, (b_points[i], b_points[i + 1]))
                         self.detection_lines_to_draw.append(point)
-                        distance = (round(self.car.x - point[0], 1), round(self.car.y - point[1], 1))
+                        distance = (int(round(self.car.x - point[0], 0)), int(round(self.car.y - point[1], 0)))
                         self.detected_points.append(distance)
                         intersect = True
                     i += 1
