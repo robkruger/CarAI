@@ -13,4 +13,4 @@ class Car(object):
         self.speed = max(self.speed, 0)
 
     def steer(self, direction, delta):
-        self.direction += ((3 / (self.speed / 4 + 0.01)) * (delta / 1000)) * direction
+        self.direction += ((3 * (delta / 1000) / (self.speed / 4 + 0.01)) * direction)

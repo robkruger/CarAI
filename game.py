@@ -57,11 +57,11 @@ class Game(object):
 
     def parse_events(self):
         keys = pygame.key.get_pressed()
-        if self.draw_mode != 4:
+        if self.draw_mode < 4:
             self.clock.tick(100)
         else:
             self.clock.tick()
-        delta = max(self.clock.get_time(), 1)
+        delta = 10  # max(self.clock.get_time(), 1)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -205,7 +205,7 @@ class Game(object):
             for line in self.hit_box:
                 pygame.draw.lines(self.screen, self.color, False, line, 2)
 
-        if self.draw_mode < 2:
+        if self.draw_mode < 2 or self.draw_mode == 4:
             for point in self.detection_lines_to_draw:
                 if point == "n":
                     continue
