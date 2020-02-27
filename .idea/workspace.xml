@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d65ab604-1706-4793-905f-f200291d944c" name="Default Changelist" comment="">
+    <list default="true" id="57aa995d-5fd7-4ad4-b114-79c74b06e2c3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/CarAI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CarAI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/q.json" beforeDir="false" afterPath="$PROJECT_DIR$/q.json" afterDir="false" />
     </list>
@@ -40,7 +42,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../venv/bin/python3" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../PycharmProjects/SnakeAI/venv/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -81,10 +83,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="424" y="37" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582718094692">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582787893971">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1582562614433" />
+    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1582787893971" />
     <state x="424" y="37" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1053@0.0.1920.1053" timestamp="1582718094692" />
     <state x="669" y="136" width="572" height="760" key="#main" timestamp="1582562603059">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -94,25 +96,25 @@
       <screen x="0" y="0" width="1920" height="1053" />
     </state>
     <state x="747" y="237" key="FileChooserDialogImpl/0.0.1920.1053@0.0.1920.1053" timestamp="1582545011628" />
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1582724667798">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state width="1899" height="276" key="GridCell.Tab.0.bottom" timestamp="1582788121005">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="276" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582704259785" />
+    <state width="1899" height="276" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582788121005" />
     <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1053@0.0.1920.1053" timestamp="1582724667798" />
-    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1582724667797">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state width="1899" height="276" key="GridCell.Tab.0.center" timestamp="1582788121004">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="276" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582704259784" />
+    <state width="1899" height="276" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582788121004" />
     <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1053@0.0.1920.1053" timestamp="1582724667797" />
-    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1582724667797">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state width="1899" height="276" key="GridCell.Tab.0.left" timestamp="1582788121004">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="276" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582704259784" />
+    <state width="1899" height="276" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582788121004" />
     <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1053@0.0.1920.1053" timestamp="1582724667797" />
-    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1582724667797">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state width="1899" height="276" key="GridCell.Tab.0.right" timestamp="1582788121005">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="276" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582704259784" />
+    <state width="1899" height="276" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582788121005" />
     <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1053@0.0.1920.1053" timestamp="1582724667797" />
     <state width="1899" height="341" key="GridCell.Tab.1.bottom" timestamp="1582631699572">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -130,10 +132,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="341" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582631699572" />
-    <state x="469" y="89" key="SettingsEditor" timestamp="1582718005190">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state x="469" y="137" key="SettingsEditor" timestamp="1582787901427">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="469" y="137" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582564668527" />
+    <state x="469" y="137" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1582787901427" />
     <state x="469" y="89" key="SettingsEditor/0.0.1920.1053@0.0.1920.1053" timestamp="1582718005190" />
     <state x="623" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1582624358465">
       <screen x="0" y="0" width="1920" height="1040" />
