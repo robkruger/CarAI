@@ -2,6 +2,7 @@ from __future__ import division
 
 import pygame
 import math
+import joblib
 
 from bezier import *
 from car import Car
@@ -47,18 +48,22 @@ class Game(object):
         self.detection_lines = []
         self.laps = 0
         self.robot = r
-        self.reward = -0.1
         self.reset = False
         self.draw_mode = 0
         self.detected_points = []
         self.rect = None
         self.shutdown = False
         self.detection_lines_to_draw = []
+        self.game_over = False
+        self.action = -1
+        self.score_increased = 0
+        self.old_lines = None
 
     def parse_events(self):
+        self.score_increased = 0
         keys = pygame.key.get_pressed()
         if self.draw_mode < 4:
-            self.clock.tick(100)
+            self.clock.tick()
         else:
             self.clock.tick()
         delta = 10  # max(self.clock.get_time(), 1)
@@ -66,7 +71,7 @@ class Game(object):
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_ESCAPE:
                     self.draw_mode = (self.draw_mode + 1) % 6
                     print("print drawmode: ", self.draw_mode)
                 if event.key == pygame.K_p:
@@ -74,23 +79,19 @@ class Game(object):
                     self.running = False
                     self.shutdown = True
 
-        self.reward = -0.1
-
-        action = self.robot.do_action()
-
         throttle = 0
-        if keys[pygame.K_w] or action == 0:
+        if keys[pygame.K_w] or self.action == 0:
             throttle = 100
-        if keys[pygame.K_d] or action == 1:
+        if keys[pygame.K_d] or self.action == 1:
             self.car.steer(-1, delta)
-        if keys[pygame.K_a] or action == 2:
+        if keys[pygame.K_a] or self.action == 2:
             self.car.steer(1, delta)
-        if keys[pygame.K_s] or action == 3:
+        if keys[pygame.K_s] or self.action == 3:
             throttle = -70
-        if action == 4:
+        if self.action == 4:
             throttle = 100
             self.car.steer(1, delta)
-        if action == 5:
+        if self.action == 5:
             throttle = 100
             self.car.steer(-1, delta)
 
@@ -113,8 +114,7 @@ class Game(object):
                         break
                     if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1], b_points[i], b_points[i + 1]):
                         self.color = (255, 0, 0)
-                        self.reward = -1
-                        self.reset = True
+                        self.game_over = True
                     i += 1
 
         if self.progress > 0:
@@ -126,8 +126,8 @@ class Game(object):
                                           self.checkpoints[self.progress - 1][1]):
                     self.color = (255, 0, 0)
                     self.progress = (self.progress + 1) % (len(self.checkpoints) + 1)
+                    self.score_increased = 1
                     print(self.progress)
-                    self.reward = 1
                     break
         else:
             for x in range(len(self.hit_box)):
@@ -137,9 +137,9 @@ class Game(object):
                                           self.finish_line[1]):
                     self.color = (255, 0, 0)
                     self.progress = (self.progress + 1) % len(self.checkpoints)
+                    self.score_increased = 1
                     self.laps += 1
                     print(self.progress, self.laps)
-                    self.reward = 1
                     break
 
         self.car_image, self.rect = self.rot_center(self.car_image_original, self.car.direction)
@@ -154,33 +154,48 @@ class Game(object):
                          (self.car.x + self.rect[0], self.car.y + self.rect[3] + self.rect[1])]]
 
         self.detection_lines = []
-        for i in range(9):
-            ra = (i * 40) * math.pi / 180 + rotation_radian
-            self.detection_lines.append(
-                [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+        ra = (270) * math.pi / 180 + rotation_radian
+        self.detection_lines.append(
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+        ra = (315) * math.pi / 180 + rotation_radian
+        self.detection_lines.append(
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+        ra = (360) * math.pi / 180 + rotation_radian
+        self.detection_lines.append(
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 200), self.car.y + (math.cos(ra) * 200))])
+        ra = (45) * math.pi / 180 + rotation_radian
+        self.detection_lines.append(
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+        ra = (90) * math.pi / 180 + rotation_radian
+        self.detection_lines.append(
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
 
         self.detected_points = []
         self.detection_lines_to_draw = []
         for line in self.detection_lines:
+            point = (0, 0)
             intersect = False
+            distance = 99999999999
             for curve in self.track:
                 if len(curve) < 4:
                     continue
                 b_points = compute_bezier_points([(x.x, x.y) for x in curve])
                 for i in range(len(b_points)):
-                    if intersect:
-                        continue
                     if i + 1 == len(b_points):
                         break
                     if self.intersect_segment(line[0], line[1], b_points[i], b_points[i + 1]):
-                        point = self.line_intersection(line, (b_points[i], b_points[i + 1]))
-                        self.detection_lines_to_draw.append(point)
-                        distance = (int(round(self.car.x - point[0], 0)), int(round(self.car.y - point[1], 0)))
-                        self.detected_points.append(distance)
+                        t_point = self.line_intersection(line, (b_points[i], b_points[i + 1]))
+                        distance_to_point = (int(round(self.car.x - t_point[0], 0)), int(round(self.car.y - t_point[1], 0)))
+                        actual_dist = math.sqrt(distance_to_point[0] * distance_to_point[0] + distance_to_point[1] * distance_to_point[1])
+                        if actual_dist < distance:
+                            distance = actual_dist
+                            point = t_point
                         intersect = True
-                    i += 1
             if not intersect:
                 self.detected_points.append("n")
+            else:
+                self.detected_points.append(int(round(distance, 0)))
+                self.detection_lines_to_draw.append(point)
 
     def draw(self):
         self.screen.fill((100, 100, 100))
@@ -214,9 +229,25 @@ class Game(object):
                                     self.car.y + self.rect[1] + self.rect[3] / 2),
                                    (point[0], point[1])], 2)
 
-        self.robot.update(self.reward, self.detected_points)
+        # self.robot.update(self.reward, self.detected_points, self.progress, round(self.car.speed, 3))
 
         pygame.display.flip()
+
+    def controlled_run(self, wrapper):
+        while not self.game_over:
+            self.parse_events()
+            values = dict()
+            values['action'] = self.action
+            values['lines'] = self.detected_points
+            values['score_increased'] = self.score_increased
+            values['speed'] = self.car.speed
+            if self.old_lines is not None:
+                values['old_lines'] = self.old_lines
+            self.action = wrapper.control(values)
+            print(self.action)
+            self.old_lines = values['lines']
+            self.draw()
+        wrapper.gameover()
 
     def rot_center(self, image, angle):
 
@@ -250,10 +281,15 @@ class Game(object):
         return int(x + 0.5), int(y + 0.5)
 
     def save(self):
+        j = 0
         for state in self.robot.q:
             for i in range(len(self.robot.q[state])):
                 self.robot.q[state][i] = round(self.robot.q[state][i], 3)
-        data = json.dumps(self.robot.q)
-        f = open("q.json", "w")
-        f.write(data)
-        f.close()
+                if self.robot.q[state][i] > 0:
+                    j += 1
+        print(j, len(self.robot.q))
+        joblib.dump(self.robot.q, "q_table3.sav", 2)
+        # data = json.dumps(self.robot.q)
+        # f = open("q.json", "w")
+        # f.write(data)
+        # f.close()

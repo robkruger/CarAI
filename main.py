@@ -1,11 +1,14 @@
+import joblib
 import pygame
 import bezier
 
 from datetime import *
+import time
 from game import Game
 from robot import Robot
+from nn_robot import Wrapper
 
-r = Robot()
+r = Wrapper()
 draw = True
 run = True
 start = True
@@ -34,8 +37,9 @@ while start:
             run = False
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_y:
-                with open('q.json', 'r') as inf:
-                    r.q = eval(inf.read())
+                r.q = joblib.load("q_table3.sav")
+                # with open('q.json', 'r') as inf:
+                #     r.q = eval(inf.read())
                 start = False
             if event.key == pygame.K_n:
                 start = False

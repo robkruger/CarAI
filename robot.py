@@ -17,6 +17,7 @@ class Robot(object):
         self.q[self.state] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.action = 0
         self.total_reward = 0
+        self.high_score = 0
 
     def do_action(self):
         if self.state not in self.q:
@@ -27,11 +28,15 @@ class Robot(object):
             self.action = np.argmax(self.q[self.state])
         return self.action
 
-    def update(self, reward, points):
+    def update(self, reward, points, checkpoint, speed):
+        if checkpoint > self.high_score:
+            self.high_score = checkpoint
+            print("New highscore:", self.high_score)
         self.total_reward += reward
         new_state = ''
         for point in points:
             new_state += str(point)
+        new_state += str(speed)
         if new_state not in self.q:
             self.q[new_state] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         old_value = self.q[self.state][self.action]
