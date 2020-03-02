@@ -3,6 +3,7 @@ from __future__ import division
 import pygame
 import math
 import joblib
+import numpy as np
 
 from bezier import *
 from car import Car
@@ -58,8 +59,11 @@ class Game(object):
         self.action = -1
         self.score_increased = 0
         self.old_lines = None
+        self.reward = -0.1
 
-    def parse_events(self):
+    def parse_events(self, action):
+        self.reward = -0.1
+        self.action = action
         self.score_increased = 0
         keys = pygame.key.get_pressed()
         if self.draw_mode < 4:
@@ -71,9 +75,9 @@ class Game(object):
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_ESCAPE:
-                    self.draw_mode = (self.draw_mode + 1) % 6
-                    print("print drawmode: ", self.draw_mode)
+                # if event.key == pygame.K_ESCAPE:
+                #     self.draw_mode = (self.draw_mode + 1) % 6
+                #     print("print drawmode: ", self.draw_mode)
                 if event.key == pygame.K_p:
                     self.save()
                     self.running = False
@@ -95,6 +99,8 @@ class Game(object):
             throttle = 100
             self.car.steer(-1, delta)
 
+        self.action = -1
+
         self.car.update_speed(throttle, delta)
 
         rotation_radian = self.car.direction * math.pi / 180
@@ -114,6 +120,7 @@ class Game(object):
                         break
                     if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1], b_points[i], b_points[i + 1]):
                         self.color = (255, 0, 0)
+                        self.reward = -1
                         self.game_over = True
                     i += 1
 
@@ -127,6 +134,7 @@ class Game(object):
                     self.color = (255, 0, 0)
                     self.progress = (self.progress + 1) % (len(self.checkpoints) + 1)
                     self.score_increased = 1
+                    self.reward = 1
                     print(self.progress)
                     break
         else:
@@ -139,6 +147,7 @@ class Game(object):
                     self.progress = (self.progress + 1) % len(self.checkpoints)
                     self.score_increased = 1
                     self.laps += 1
+                    self.reward = 1
                     print(self.progress, self.laps)
                     break
 
@@ -197,6 +206,12 @@ class Game(object):
                 self.detected_points.append(int(round(distance, 0)))
                 self.detection_lines_to_draw.append(point)
 
+        for i in range(len(self.detected_points)):
+            if self.detected_points[i] == 'n':
+                self.detected_points[i] = 100
+        self.detected_points.append(self.car.speed)
+        return np.array([self.detected_points]), self.reward, self.game_over
+
     def draw(self):
         self.screen.fill((100, 100, 100))
 
@@ -244,7 +259,7 @@ class Game(object):
             if self.old_lines is not None:
                 values['old_lines'] = self.old_lines
             self.action = wrapper.control(values)
-            print(self.action)
+            print(values)
             self.old_lines = values['lines']
             self.draw()
         wrapper.gameover()
