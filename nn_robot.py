@@ -87,7 +87,7 @@ def main():
     dqn_agent = DQN()
     steps = []
     done = False
-    visualize = False
+    visualize = False 
     trial = 0
     while 1:
         cur_state = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
