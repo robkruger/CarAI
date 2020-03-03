@@ -209,6 +209,7 @@ class Game(object):
         for i in range(len(self.detected_points)):
             if self.detected_points[i] == 'n':
                 self.detected_points[i] = 100
+            self.detected_points[i] = int(self.detected_points[i])
         self.detected_points.append(self.car.speed)
         return np.array([self.detected_points]), self.reward, self.game_over
 

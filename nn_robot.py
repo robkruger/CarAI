@@ -2,6 +2,7 @@ import numpy as np
 import random
 
 import pygame
+from keras.engine.saving import load_model
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import Adam
@@ -98,9 +99,20 @@ def main():
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_ESCAPE:
                         visualize = not visualize
+                    if event.key == pygame.K_RETURN:
+                        dqn_agent.model.save('model')
+                        dqn_agent.target_model.save('target_model')
+                        print("Saved models")
+                    if event.key == pygame.K_l:
+                        dqn_agent.model = load_model('model')
+                        dqn_agent.target_model = load_model('target_model')
+                        print("Loaded models")
 
             action = dqn_agent.act(cur_state)
             new_state, reward, done = g.parse_events(action)
+
+            for i in range(len(new_state[0])):
+                new_state[0][i] = int(round(new_state[0][i], 0))
 
             dqn_agent.remember(cur_state, action, reward, new_state, done)
 
