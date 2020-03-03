@@ -67,7 +67,7 @@ class Game(object):
         self.score_increased = 0
         keys = pygame.key.get_pressed()
         if self.draw_mode < 4:
-            self.clock.tick()
+            self.clock.tick(30)
         else:
             self.clock.tick()
         delta = 10  # max(self.clock.get_time(), 1)
@@ -210,7 +210,15 @@ class Game(object):
             if self.detected_points[i] == 'n':
                 self.detected_points[i] = 100
             self.detected_points[i] = int(self.detected_points[i])
-        self.detected_points.append(self.car.speed)
+        distance_to_point = (self.checkpoints[self.progress - 1][2][0] - self.car.x,
+                             self.checkpoints[self.progress - 1][2][1] - self.car.y)
+        radians = math.atan2(self.checkpoints[self.progress - 1][2][1] - self.car.y,
+                             self.checkpoints[self.progress - 1][2][0] - self.car.x)
+        degrees = (math.degrees(radians - rotation_radian) + 90) % 360
+        self.detected_points.append(distance_to_point[0])
+        self.detected_points.append(distance_to_point[1])
+        self.detected_points.append(round(degrees / 360, 2))
+        self.detected_points.append(round(self.car.speed * 10, 2))
         return np.array([self.detected_points]), self.reward, self.game_over
 
     def draw(self):
@@ -230,7 +238,7 @@ class Game(object):
 
         if self.draw_mode < 3:
             for checkpoint in self.checkpoints:
-                pygame.draw.lines(self.screen, (130, 130, 130), False, checkpoint, 2)
+                pygame.draw.lines(self.screen, (130, 130, 130), False, (checkpoint[0], checkpoint[1]), 2)
 
         if self.draw_mode < 1:
             for line in self.hit_box:

@@ -1,3 +1,4 @@
+import joblib
 import numpy as np
 import random
 
@@ -14,7 +15,7 @@ from game import Game
 
 class DQN:
     def __init__(self):
-        self.memory = deque(maxlen=2000)
+        self.memory = deque(maxlen=4000)
 
         self.gamma = 0.85
         self.epsilon = 1.0
@@ -28,7 +29,7 @@ class DQN:
 
     def create_model(self):
         model = Sequential()
-        model.add(Dense(24, input_dim=6, activation="relu"))
+        model.add(Dense(24, input_dim=9, activation="relu"))
         model.add(Dense(48, activation="relu"))
         model.add(Dense(24, activation="relu"))
         model.add(Dense(6))
@@ -89,7 +90,7 @@ def main():
     visualize = False
     trial = 0
     while 1:
-        cur_state = np.array([[0, 0, 0, 0, 0, 0]])
+        cur_state = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
         g = Game((1024, 768), None)
         done = False
         trial += 1
@@ -102,16 +103,18 @@ def main():
                     if event.key == pygame.K_RETURN:
                         dqn_agent.model.save('model')
                         dqn_agent.target_model.save('target_model')
+                        joblib.dump(dqn_agent.memory, "memory.sav", 2)
                         print("Saved models")
                     if event.key == pygame.K_l:
                         dqn_agent.model = load_model('model')
                         dqn_agent.target_model = load_model('target_model')
+                        dqn_agent.memory = joblib.load("memory.sav")
                         print("Loaded models")
 
             action = dqn_agent.act(cur_state)
             new_state, reward, done = g.parse_events(action)
 
-            for i in range(len(new_state[0])):
+            for i in range(len(new_state[0]) - 2):
                 new_state[0][i] = int(round(new_state[0][i], 0))
 
             dqn_agent.remember(cur_state, action, reward, new_state, done)

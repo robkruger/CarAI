@@ -159,9 +159,13 @@ def main():
                         if abs(p.x - event.pos[X]) < 10 and abs(p.y - event.pos[Y]) < 10:
                             selected = p
             elif event.type == MOUSEBUTTONDOWN and event.button == 2:
-                if len(rewards[-1]) < 2:
-                    rewards[-1].append(vec2d(event.pos[X], event.pos[Y]))
-                else:
+                appended = False
+                for i in range(len(rewards)):
+                    if len(rewards[i]) < 3:
+                        rewards[i].append(vec2d(event.pos[X], event.pos[Y]))
+                        appended = True
+                        break
+                if not appended:
                     new_list = [vec2d(event.pos[X], event.pos[Y])]
                     rewards.append(new_list)
             elif event.type == MOUSEBUTTONDOWN and event.button == 3:
@@ -209,7 +213,7 @@ def main():
             pygame.draw.lines(screen, pygame.Color("red"), False, b_points, 2)
 
         for line in rewards:
-            if len(line) < 2:
+            if len(line) < 3:
                 continue
             pygame.draw.lines(screen, pygame.Color("green"), False, ((line[0].x, line[0].y), (line[1].x, line[1].y)), 2)
 
