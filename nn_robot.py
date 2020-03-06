@@ -1,3 +1,5 @@
+from __future__ import division
+
 import joblib
 import numpy as np
 import random
@@ -12,56 +14,69 @@ from collections import deque
 
 from game import Game
 
+import pandas as pd
+from operator import add
+
 
 class DQN:
     def __init__(self):
-        self.memory = deque(maxlen=4000)
+        self.memory = deque(maxlen=1000)
 
         self.gamma = 0.85
         self.epsilon = 1.0
         self.epsilon_min = 0.01
-        self.epsilon_decay = 0.995
+        self.epsilon_decay = 0.999
         self.learning_rate = 0.005
         self.tau = .125
 
         self.model = self.create_model()
         self.target_model = self.create_model()
 
-    def create_model(self):
+    def create_model(self, weights=None):
         model = Sequential()
-        model.add(Dense(24, input_dim=9, activation="relu"))
-        model.add(Dense(48, activation="relu"))
-        model.add(Dense(24, activation="relu"))
-        model.add(Dense(6))
-        model.compile(loss="mean_squared_error",
-                      optimizer=Adam(lr=self.learning_rate))
+        model.add(Dense(output_dim=120, activation='relu', input_dim=6))
+        model.add(Dropout(0.15))
+        model.add(Dense(output_dim=120, activation='relu'))
+        model.add(Dropout(0.15))
+        model.add(Dense(output_dim=120, activation='relu'))
+        model.add(Dropout(0.15))
+        model.add(Dense(output_dim=6, activation='softmax'))
+        opt = Adam(self.learning_rate)
+        model.compile(loss='mse', optimizer=opt)
+
+        if weights:
+            model.load_weights(weights)
         return model
 
-    def act(self, state):
-        self.epsilon *= self.epsilon_decay
-        self.epsilon = max(self.epsilon_min, self.epsilon)
-        if np.random.random() < self.epsilon:
+    def act(self, state, games):
+        self.epsilon = 80 - games
+        if np.random.randint(0, 200) < self.epsilon:
             return random.randrange(6)
-        return np.argmax(self.model.predict(state)[0])
+        return np.argmax(self.model.predict(state.reshape(1, 6))[0])
 
-    def remember(self, state, action, reward, new_state, done):
-        self.memory.append([state, action, reward, new_state, done])
+    def remember(self, state, action, reward, next_state, done):
+        self.memory.append((state, action, reward, next_state, done))
 
-    def replay(self):
-        batch_size = 32
-        if len(self.memory) < batch_size:
-            return
+    def replay_new(self, memory):
+        if len(memory) > 1000:
+            minibatch = random.sample(memory, 1000)
+        else:
+            minibatch = memory
+        for state, action, reward, next_state, done in minibatch:
+            target = reward
+            if not done:
+                target = reward + self.gamma * np.amax(self.model.predict(np.array(next_state.reshape(1, 6)))[0])
+            target_f = self.model.predict(state.reshape(1, 6))
+            target_f[0][np.argmax(action)] = target
+            self.model.fit(np.array(state.reshape(1, 6)), target_f, epochs=1, verbose=0)
 
-        samples = random.sample(self.memory, batch_size)
-        for sample in samples:
-            state, action, reward, new_state, done = sample
-            target = self.target_model.predict(state)
-            if done:
-                target[0][action] = reward
-            else:
-                Q_future = max(self.target_model.predict(new_state)[0])
-                target[0][action] = reward + Q_future * self.gamma
-            self.model.fit(state, target, epochs=1, verbose=0)
+    def train_short_memory(self, state, action, reward, next_state, done):
+        target = reward
+        if not done:
+            target = reward + self.gamma * np.amax(self.model.predict(next_state.reshape((1, 6)))[0])
+        target_f = self.model.predict(state.reshape((1, 6)))
+        target_f[0][np.argmax(action)] = target
+        self.model.fit(state.reshape((1, 6)), target_f, epochs=1, verbose=0)
 
     def target_train(self):
         weights = self.model.get_weights()
@@ -75,27 +90,18 @@ class DQN:
 
 
 def main():
-    gamma = 0.9
-    epsilon = .95
-
-    trials = 100000
-    trial_len = 700
-    show_off = 5
     pygame.init()
-
-    # updateTargetNetwork = 1000
-    dqn_agent = DQN()
-    steps = []
-    done = False
-    visualize = False 
+    visualize = False
     trial = 0
     while 1:
-        cur_state = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
+        cur_state = np.array([0, 0, 0, 0, 0, 0.0])
         g = Game((1024, 768), None)
         done = False
         trial += 1
         print("Next trial:", trial)
+        steps = 0
         while not done:
+            steps += 1
             for event in pygame.event.get():
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_ESCAPE:
@@ -111,20 +117,32 @@ def main():
                         dqn_agent.memory = joblib.load("memory.sav")
                         print("Loaded models")
 
-            action = dqn_agent.act(cur_state)
-            new_state, reward, done = g.parse_events(action)
-
-            for i in range(len(new_state[0]) - 2):
-                new_state[0][i] = int(round(new_state[0][i], 0))
+            action = dqn_agent.act(cur_state, trial)
+            new_state, reward, done, cr_ch = g.parse_events(action)
 
             dqn_agent.remember(cur_state, action, reward, new_state, done)
 
-            dqn_agent.replay()  # internally iterates default (prediction) model
-            dqn_agent.target_train()  # iterates target model
+            dqn_agent.train_short_memory(cur_state, action, reward, new_state, done)
 
             cur_state = new_state
             if visualize:
                 g.draw()
+
+            if cr_ch:
+                steps = 0
+
+            if steps > 200:
+                print("More than 200 steps, probably stuck. Resetting.")
+                break
+
+        dqn_agent.replay_new(dqn_agent.memory)  # internally iterates default (prediction) model
+        dqn_agent.target_train()  # iterates target model
+
+        if trial % 10 == 0:
+            dqn_agent.model.save('model')
+            dqn_agent.target_model.save('target_model')
+            joblib.dump(dqn_agent.memory, "memory.sav", 2)
+            print("Saved models")
 
 
 if __name__ == "__main__":

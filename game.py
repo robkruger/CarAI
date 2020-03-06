@@ -59,12 +59,13 @@ class Game(object):
         self.action = -1
         self.score_increased = 0
         self.old_lines = None
-        self.reward = -0.1
+        self.reward = 0
+        self.crossed_checkpoint = False
 
-    def parse_events(self, action):
-        self.reward = -0.1
-        self.action = action
+    def parse_events(self):
+        self.reward = 0
         self.score_increased = 0
+        self.crossed_checkpoint = False
         keys = pygame.key.get_pressed()
         if self.draw_mode < 4:
             self.clock.tick(30)
@@ -82,6 +83,8 @@ class Game(object):
                     self.save()
                     self.running = False
                     self.shutdown = True
+
+        self.action = self.robot.do_action()
 
         throttle = 0
         if keys[pygame.K_w] or self.action == 0:
@@ -108,6 +111,35 @@ class Game(object):
         self.car.y += (1000 / delta) * math.cos(rotation_radian) * self.car.speed
 
         self.color = (0, 0, 255)
+        if self.progress > 0:
+            for x in range(len(self.hit_box)):
+                if len(self.hit_box) < 4:
+                    break
+                if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1],
+                                          self.checkpoints[self.progress - 1][0],
+                                          self.checkpoints[self.progress - 1][1]):
+                    self.color = (255, 0, 0)
+                    self.progress = (self.progress + 1) % (len(self.checkpoints) + 1)
+                    self.score_increased = 1
+                    self.crossed_checkpoint = True
+                    self.reward = 1
+                    print(self.progress)
+                    break
+        else:
+            for x in range(len(self.hit_box)):
+                if len(self.hit_box) < 4:
+                    break
+                if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1], self.finish_line[0],
+                                          self.finish_line[1]):
+                    self.color = (255, 0, 0)
+                    self.progress = (self.progress + 1) % len(self.checkpoints)
+                    self.score_increased = 1
+                    self.crossed_checkpoint = True
+                    self.laps += 1
+                    self.reward = 1
+                    print(self.progress, self.laps)
+                    break
+
         for curve in self.track:
             if len(curve) < 4:
                 continue
@@ -121,35 +153,8 @@ class Game(object):
                     if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1], b_points[i], b_points[i + 1]):
                         self.color = (255, 0, 0)
                         self.reward = -1
-                        self.game_over = True
+                        self.running = False
                     i += 1
-
-        if self.progress > 0:
-            for x in range(len(self.hit_box)):
-                if len(self.hit_box) < 4:
-                    break
-                if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1],
-                                          self.checkpoints[self.progress - 1][0],
-                                          self.checkpoints[self.progress - 1][1]):
-                    self.color = (255, 0, 0)
-                    self.progress = (self.progress + 1) % (len(self.checkpoints) + 1)
-                    self.score_increased = 1
-                    self.reward = 1
-                    print(self.progress)
-                    break
-        else:
-            for x in range(len(self.hit_box)):
-                if len(self.hit_box) < 4:
-                    break
-                if self.intersect_segment(self.hit_box[x][0], self.hit_box[x][1], self.finish_line[0],
-                                          self.finish_line[1]):
-                    self.color = (255, 0, 0)
-                    self.progress = (self.progress + 1) % len(self.checkpoints)
-                    self.score_increased = 1
-                    self.laps += 1
-                    self.reward = 1
-                    print(self.progress, self.laps)
-                    break
 
         self.car_image, self.rect = self.rot_center(self.car_image_original, self.car.direction)
 
@@ -165,19 +170,19 @@ class Game(object):
         self.detection_lines = []
         ra = (270) * math.pi / 180 + rotation_radian
         self.detection_lines.append(
-            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 200), self.car.y + (math.cos(ra) * 200))])
         ra = (315) * math.pi / 180 + rotation_radian
         self.detection_lines.append(
-            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 200), self.car.y + (math.cos(ra) * 200))])
         ra = (360) * math.pi / 180 + rotation_radian
         self.detection_lines.append(
             [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 200), self.car.y + (math.cos(ra) * 200))])
         ra = (45) * math.pi / 180 + rotation_radian
         self.detection_lines.append(
-            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 200), self.car.y + (math.cos(ra) * 200))])
         ra = (90) * math.pi / 180 + rotation_radian
         self.detection_lines.append(
-            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 100), self.car.y + (math.cos(ra) * 100))])
+            [(self.car.x, self.car.y), (self.car.x + (math.sin(ra) * 200), self.car.y + (math.cos(ra) * 200))])
 
         self.detected_points = []
         self.detection_lines_to_draw = []
@@ -209,17 +214,25 @@ class Game(object):
         for i in range(len(self.detected_points)):
             if self.detected_points[i] == 'n':
                 self.detected_points[i] = 100
-            self.detected_points[i] = int(self.detected_points[i])
-        distance_to_point = (self.checkpoints[self.progress - 1][2][0] - self.car.x,
-                             self.checkpoints[self.progress - 1][2][1] - self.car.y)
-        radians = math.atan2(self.checkpoints[self.progress - 1][2][1] - self.car.y,
-                             self.checkpoints[self.progress - 1][2][0] - self.car.x)
-        degrees = (math.degrees(radians - rotation_radian) + 90) % 360
-        self.detected_points.append(distance_to_point[0])
-        self.detected_points.append(distance_to_point[1])
-        self.detected_points.append(round(degrees / 360, 2))
-        self.detected_points.append(round(self.car.speed * 10, 2))
-        return np.array([self.detected_points]), self.reward, self.game_over
+            # self.detected_points[i] = round(min(self.detected_points[i], 100) / 100.0, 2)
+        # self.detected_points.append(self.progress)
+        # radians = math.atan2(self.checkpoints[self.progress - 1][2][1] - self.car.y,
+        #                      self.checkpoints[self.progress - 1][2][0] - self.car.x)
+        # degrees = (math.degrees(radians - rotation_radian) + 90) % 360
+        # self.detected_points.append(round(degrees / 360, 2))
+        state = []
+        temp = sorted(self.detected_points)
+        for i in range(len(self.detection_lines_to_draw)):
+            if self.detected_points[i] < 35:
+                state.append(1)  # danger
+                self.detection_lines_to_draw[i] = (self.detection_lines_to_draw[i], (255, 0, 0))
+            else:
+                state.append(0)  # no danger
+                self.detection_lines_to_draw[i] = (self.detection_lines_to_draw[i], (0, 0, 255))
+        state.append(round(self.car.speed * 10, 1))
+
+        self.robot.update(self.reward, state, self.progress)
+        return np.array(state), self.reward, self.game_over, self.crossed_checkpoint
 
     def draw(self):
         self.screen.fill((100, 100, 100))
@@ -248,10 +261,10 @@ class Game(object):
             for point in self.detection_lines_to_draw:
                 if point == "n":
                     continue
-                pygame.draw.lines(self.screen, self.color, False,
+                pygame.draw.lines(self.screen, point[1], False,
                                   [(self.car.x + self.rect[0] + self.rect[2] / 2,
                                     self.car.y + self.rect[1] + self.rect[3] / 2),
-                                   (point[0], point[1])], 2)
+                                   (point[0][0], point[0][1])], 2)
 
         # self.robot.update(self.reward, self.detected_points, self.progress, round(self.car.speed, 3))
 

@@ -1,12 +1,11 @@
-import joblib
 import pygame
 import bezier
 
 from datetime import *
-import time
 from game import Game
 from robot import Robot
 
+r = Robot()
 draw = True
 run = True
 start = True
@@ -35,16 +34,16 @@ while start:
             run = False
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_y:
-                # r.q = joblib.load("q_table3.sav")
-                # with open('q.json', 'r') as inf:
-                #     r.q = eval(inf.read())
+                with open('q.json', 'r') as inf:
+                    r.q = eval(inf.read())
                 start = False
             if event.key == pygame.K_n:
                 start = False
 
+print(r.q)
 
 while run:
-    g = Game((1024, 768), None)
+    g = Game((1024, 768), r)
     g.draw_mode = draw
     now = datetime.now()
     if now > today_at(hour_time[0], hour_time[1]):
@@ -56,7 +55,7 @@ while run:
             hour_time = (now.hour, now.minute + 30)
         g.save()
     while g.running:
-        g.parse_events(-1)
+        g.parse_events()
         draw = g.draw_mode
         if draw < 5:
             g.draw()
