@@ -5,14 +5,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/CarAI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CarAI.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bezier.py" beforeDir="false" afterPath="$PROJECT_DIR$/bezier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/car.py" beforeDir="false" afterPath="$PROJECT_DIR$/car.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/memory.sav" beforeDir="false" afterPath="$PROJECT_DIR$/memory.sav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model" beforeDir="false" afterPath="$PROJECT_DIR$/model" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nn_robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/nn_robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_table3.sav" beforeDir="false" afterPath="$PROJECT_DIR$/q_table3.sav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reward_gates2.json" beforeDir="false" afterPath="$PROJECT_DIR$/reward_gates2.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target_model" beforeDir="false" afterPath="$PROJECT_DIR$/target_model" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/track2.json" beforeDir="false" afterPath="$PROJECT_DIR$/track2.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,11 +38,11 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/bezier.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/test.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.neat">
     <configuration name="bezier" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="CarAI" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -86,6 +85,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="neat" type="PythonConfigurationType" factoryName="Python">
+      <module name="CarAI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../PycharmProjects/SnakeAI/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="nn_robot" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="CarAI" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -107,10 +127,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="CarAI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../PycharmProjects/SnakeAI/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.bezier" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.neat" />
       <item itemvalue="Python.nn_robot" />
+      <item itemvalue="Python.test" />
     </list>
   </component>
   <component name="ServiceViewManager">
@@ -139,10 +182,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583481590659">
+    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583653469852">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583481590659" />
+    <state x="424" y="135" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583653469852" />
     <state x="424" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1053@0.0.1920.1053" timestamp="1583229045395" />
     <state x="669" y="136" width="572" height="760" key="#main" timestamp="1582562603059">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -152,64 +195,64 @@
       <screen x="0" y="0" width="1920" height="1053" />
     </state>
     <state x="602" y="125" width="714" height="798" key="CommitChangelistDialog2/0.0.1920.1053@0.0.1920.1053" timestamp="1583235816699" />
-    <state x="747" y="137" width="424" height="479" key="FileChooserDialogImpl" timestamp="1583229043525">
-      <screen x="0" y="0" width="1920" height="1053" />
+    <state x="747" y="234" width="424" height="479" key="FileChooserDialogImpl" timestamp="1583653468338">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="560" y="173" width="424" height="479" key="FileChooserDialogImpl/0.0.1440.770@0.0.1440.770" timestamp="1582985905897" />
-    <state x="747" y="234" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1583059209644" />
+    <state x="747" y="234" width="424" height="479" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1583653468338" />
     <state x="747" y="137" key="FileChooserDialogImpl/0.0.1920.1053@0.0.1920.1053" timestamp="1583229043525" />
-    <state width="1899" height="175" key="GridCell.Tab.0.bottom" timestamp="1583482684977">
+    <state width="1899" height="175" key="GridCell.Tab.0.bottom" timestamp="1583686736522">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1419" height="116" key="GridCell.Tab.0.bottom/0.0.1440.770@0.0.1440.770" timestamp="1582985907320" />
-    <state width="1899" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583482684977" />
+    <state width="1899" height="175" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583686736522" />
     <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1053@0.0.1920.1053" timestamp="1583235833815" />
-    <state width="1899" height="175" key="GridCell.Tab.0.center" timestamp="1583482684976">
+    <state width="1899" height="175" key="GridCell.Tab.0.center" timestamp="1583686736521">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1419" height="116" key="GridCell.Tab.0.center/0.0.1440.770@0.0.1440.770" timestamp="1582985907319" />
-    <state width="1899" height="175" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583482684976" />
+    <state width="1899" height="175" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583686736521" />
     <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1053@0.0.1920.1053" timestamp="1583235833811" />
-    <state width="1899" height="175" key="GridCell.Tab.0.left" timestamp="1583482684976">
+    <state width="1899" height="175" key="GridCell.Tab.0.left" timestamp="1583686736521">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1419" height="116" key="GridCell.Tab.0.left/0.0.1440.770@0.0.1440.770" timestamp="1582985907319" />
-    <state width="1899" height="175" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583482684976" />
+    <state width="1899" height="175" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583686736521" />
     <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1053@0.0.1920.1053" timestamp="1583235833809" />
-    <state width="1899" height="175" key="GridCell.Tab.0.right" timestamp="1583482684976">
+    <state width="1899" height="175" key="GridCell.Tab.0.right" timestamp="1583686736522">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1419" height="116" key="GridCell.Tab.0.right/0.0.1440.770@0.0.1440.770" timestamp="1582985907320" />
-    <state width="1899" height="175" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583482684976" />
+    <state width="1899" height="175" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583686736522" />
     <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1053@0.0.1920.1053" timestamp="1583235833813" />
-    <state width="1899" height="346" key="GridCell.Tab.1.bottom" timestamp="1583229576136">
-      <screen x="0" y="0" width="1920" height="1053" />
-    </state>
-    <state width="1899" height="341" key="GridCell.Tab.1.bottom/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
-    <state width="1899" height="341" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582968534999" />
-    <state width="1899" height="346" key="GridCell.Tab.1.bottom/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576136" />
-    <state width="1899" height="346" key="GridCell.Tab.1.center" timestamp="1583229576135">
-      <screen x="0" y="0" width="1920" height="1053" />
-    </state>
-    <state width="1899" height="341" key="GridCell.Tab.1.center/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
-    <state width="1899" height="341" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582968534999" />
-    <state width="1899" height="346" key="GridCell.Tab.1.center/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576135" />
-    <state width="1899" height="346" key="GridCell.Tab.1.left" timestamp="1583229576135">
-      <screen x="0" y="0" width="1920" height="1053" />
-    </state>
-    <state width="1899" height="341" key="GridCell.Tab.1.left/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
-    <state width="1899" height="341" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582968534999" />
-    <state width="1899" height="346" key="GridCell.Tab.1.left/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576135" />
-    <state width="1899" height="346" key="GridCell.Tab.1.right" timestamp="1583229576135">
-      <screen x="0" y="0" width="1920" height="1053" />
-    </state>
-    <state width="1899" height="341" key="GridCell.Tab.1.right/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
-    <state width="1899" height="341" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582968534999" />
-    <state width="1899" height="346" key="GridCell.Tab.1.right/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576135" />
-    <state x="469" y="137" key="SettingsEditor" timestamp="1583243503593">
+    <state width="1899" height="341" key="GridCell.Tab.1.bottom" timestamp="1583604515751">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="469" y="137" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1583243503593" />
+    <state width="1899" height="341" key="GridCell.Tab.1.bottom/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
+    <state width="1899" height="341" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583604515751" />
+    <state width="1899" height="346" key="GridCell.Tab.1.bottom/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576136" />
+    <state width="1899" height="341" key="GridCell.Tab.1.center" timestamp="1583604515750">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="341" key="GridCell.Tab.1.center/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
+    <state width="1899" height="341" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583604515750" />
+    <state width="1899" height="346" key="GridCell.Tab.1.center/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576135" />
+    <state width="1899" height="341" key="GridCell.Tab.1.left" timestamp="1583604515750">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="341" key="GridCell.Tab.1.left/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
+    <state width="1899" height="341" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583604515750" />
+    <state width="1899" height="346" key="GridCell.Tab.1.left/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576135" />
+    <state width="1899" height="341" key="GridCell.Tab.1.right" timestamp="1583604515751">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="341" key="GridCell.Tab.1.right/0.0.1440.770@0.0.1440.770" timestamp="1582983164653" />
+    <state width="1899" height="341" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583604515751" />
+    <state width="1899" height="346" key="GridCell.Tab.1.right/0.0.1920.1053@0.0.1920.1053" timestamp="1583229576135" />
+    <state x="469" y="137" key="SettingsEditor" timestamp="1583590121070">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="469" y="137" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1583590121070" />
     <state x="469" y="64" key="SettingsEditor/0.0.1920.1053@0.0.1920.1053" timestamp="1582802880118" />
     <state x="623" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1582624358465">
       <screen x="0" y="0" width="1920" height="1040" />

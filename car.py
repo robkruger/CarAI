@@ -1,9 +1,9 @@
 class Car(object):
 
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.direction = 0
+    def __init__(self, x, y, direction):
+        self.x = x
+        self.y = y
+        self.direction = direction
         self.speed = 0
         self.friction = 0.0001
 

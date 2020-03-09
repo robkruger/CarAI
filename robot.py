@@ -9,7 +9,7 @@ class Robot(object):
     def __init__(self):
         self.num_actions = 4
         self.epsilon = 0.1
-        self.alpha = 0.9
+        self.alpha = 0.1
         self.gamma = 0.9
 
         self.q = {}
@@ -39,9 +39,9 @@ class Robot(object):
         old_value = self.q[self.state][self.action]
         next_max = np.max(self.q[new_state])
 
-        new_value = (1 - self.alpha) * old_value + self.alpha * (reward + self.gamma * next_max)
+        new_value = old_value + self.alpha * (reward + self.gamma * next_max - old_value)
         self.q[self.state][self.action] = new_value
 
         self.state = new_state
 
-        print(len(self.q))
+        # print(self.q)

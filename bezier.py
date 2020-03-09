@@ -158,6 +158,10 @@ def main():
                     for p in curve:
                         if abs(p.x - event.pos[X]) < 10 and abs(p.y - event.pos[Y]) < 10:
                             selected = p
+                for reward in rewards:
+                    for p in reward:
+                        if abs(p.x - event.pos[X]) < 10 and abs(p.y - event.pos[Y]) < 10:
+                            selected = p
             elif event.type == MOUSEBUTTONDOWN and event.button == 2:
                 appended = False
                 for i in range(len(rewards)):

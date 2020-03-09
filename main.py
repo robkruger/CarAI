@@ -1,3 +1,4 @@
+import joblib
 import pygame
 import bezier
 
@@ -34,8 +35,7 @@ while start:
             run = False
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_y:
-                with open('q.json', 'r') as inf:
-                    r.q = eval(inf.read())
+                r.q = joblib.load('q_table3.sav')
                 start = False
             if event.key == pygame.K_n:
                 start = False
@@ -57,8 +57,7 @@ while run:
     while g.running:
         g.parse_events()
         draw = g.draw_mode
-        if draw < 5:
-            g.draw()
+        g.draw()
         if g.reset:
             break
         if g.shutdown:
