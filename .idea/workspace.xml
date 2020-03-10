@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57aa995d-5fd7-4ad4-b114-79c74b06e2c3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/CarAI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CarAI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bezier.py" beforeDir="false" afterPath="$PROJECT_DIR$/bezier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/car.py" beforeDir="false" afterPath="$PROJECT_DIR$/car.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/q_table3.sav" beforeDir="false" afterPath="$PROJECT_DIR$/q_table3.sav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reward_gates2.json" beforeDir="false" afterPath="$PROJECT_DIR$/reward_gates2.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/robot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/track2.json" beforeDir="false" afterPath="$PROJECT_DIR$/track2.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
