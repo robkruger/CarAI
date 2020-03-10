@@ -90,7 +90,7 @@ class Game(object):
         if keys[pygame.K_a] or self.action == 2:
             car.steer(1, delta)
         if keys[pygame.K_s] or self.action == 3:
-            throttle = -70
+            throttle = -100
         if self.action == 4:
             throttle = 100
             car.steer(1, delta)
@@ -174,6 +174,15 @@ class Game(object):
         ra = (90) * math.pi / 180 + rotation_radian
         detection_lines.append(
             [(car.x, car.y), (car.x + (math.sin(ra) * 200), car.y + (math.cos(ra) * 200))])
+        ra = (135) * math.pi / 180 + rotation_radian
+        detection_lines.append(
+            [(car.x, car.y), (car.x + (math.sin(ra) * 200), car.y + (math.cos(ra) * 200))])
+        ra = (180) * math.pi / 180 + rotation_radian
+        detection_lines.append(
+            [(car.x, car.y), (car.x + (math.sin(ra) * 200), car.y + (math.cos(ra) * 200))])
+        ra = (225) * math.pi / 180 + rotation_radian
+        detection_lines.append(
+            [(car.x, car.y), (car.x + (math.sin(ra) * 200), car.y + (math.cos(ra) * 200))])
 
         detected_points = []
         detection_lines_to_draw = []
@@ -213,9 +222,8 @@ class Game(object):
             if point == 'n':
                 state.append(1)
                 continue
-            state.append(round(point / 200, 2))
-        state.append(round(car.speed * 10, 2))
-        # state.append(round(car.speed * 10, 1))
+            state.append(point / 200)
+        state.append(car.speed * 10)
 
         if not crossed_checkpoint:
             steps += 1
@@ -224,7 +232,7 @@ class Game(object):
 
         return state, game_over, crossed_checkpoint, progress, car_image, rect, steps, hit_box, detection_lines_to_draw
 
-    def draw(self, cars, generation, deaths):
+    def draw(self, cars, generation, deaths, max_steps):
         self.screen.fill((100, 100, 100))
 
         if self.draw_mode < 4:
@@ -269,7 +277,7 @@ class Game(object):
             for checkpoint in self.checkpoints:
                 pygame.draw.lines(self.screen, (130, 130, 130), False, (checkpoint[0], checkpoint[1]), 2)
 
-        text = self.font.render("Generation: " + str(generation), True, (255, 255, 255))
+        text = self.font.render("Generation: " + str(generation) + "     Max steps: " + str(max_steps), True, (255, 255, 255))
         self.screen.blit(text, (0, 0))
 
         # self.robot.update(self.reward, self.detected_points, self.progress, round(self.car.speed, 3))
@@ -355,7 +363,11 @@ def fitness_func(genomes, config):
     g = Game((1024, 768), None)
     clock = pygame.time.Clock()
     death_positions = []
+    max_steps = 60 + (int(generation / 5) * 15)
+    print(max_steps)
+    step = 0
     while run:
+        step += 1
         all_fitness = []
         for genome in ge:
             all_fitness.append(genome.fitness)
@@ -367,6 +379,7 @@ def fitness_func(genomes, config):
             draw_info.append((car_image, car[0], rect, hitbox, lines))
 
             if done:
+                ge[x].fitness -= 3
                 nets.pop(x)
                 ge.pop(x)
                 cars.pop(x)
@@ -389,9 +402,12 @@ def fitness_func(genomes, config):
             action = np.argmax(output)
             cars[x] = (car[0], progress, action, steps)
 
-        g.draw(draw_info, generation, death_positions)
+        g.draw(draw_info, generation, death_positions, max_steps)
 
         if len(cars) < 1:
+            run = False
+
+        if step > max_steps:
             run = False
 
 
