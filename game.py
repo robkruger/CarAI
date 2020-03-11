@@ -10,7 +10,6 @@ import numpy as np
 
 from bezier import *
 from car import Car
-from robot import Robot
 
 
 class Game(object):
