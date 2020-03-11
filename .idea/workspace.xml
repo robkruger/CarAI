@@ -2,25 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57aa995d-5fd7-4ad4-b114-79c74b06e2c3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-feedforward.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config-feedforward.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-129" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-129" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-134" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-134" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-139" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-139" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-14" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-14" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-144" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-144" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-19" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-19" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-24" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-24" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-29" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-29" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-34" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-34" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-39" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-39" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-4" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-44" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-44" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-49" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-49" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-54" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-54" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-59" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-59" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/generation-9" beforeDir="false" afterPath="$PROJECT_DIR$/saves/generation-9" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/q.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_table.sav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_table1.sav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_table2.sav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_table3.sav" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
