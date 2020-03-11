@@ -406,12 +406,12 @@ def fitness_func(genomes, config, best):
         if len(cars) < 1:
             run = False
 
-        if step > max_steps:
-            run = False
+        # if step > max_steps:
+        #     run = False
 
 
 generation = -1
-start_generation = 129
+start_generation = 0
 show_best = False
 
 
@@ -419,8 +419,8 @@ def run(config_path):
     config = neatfast.config.Config(neatfast.DefaultGenome, neatfast.DefaultReproduction,
                                 neatfast.DefaultSpeciesSet, neatfast.DefaultStagnation, config_path)
 
-    # p = neatfast.Population(config)
-    p = neatfast.Checkpointer(5).restore_checkpoint("saves/generation-129")
+    p = neatfast.Population(config)
+    # p = neatfast.Checkpointer(5).restore_checkpoint("saves/generation-129")
 
     p.add_reporter(neatfast.Checkpointer(5, 300, "saves/generation-"))
 
