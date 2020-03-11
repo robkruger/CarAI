@@ -1,7 +1,7 @@
 from __future__ import division
 
 import os
-import neat
+import neatfast
 
 import pygame
 import math
@@ -66,30 +66,19 @@ class Game(object):
 
     def parse_events(self, car, progress, action, steps):
         self.crossed_checkpoint = False
-        keys = pygame.key.get_pressed()
+        # keys = pygame.key.get_pressed()
         delta = 10  # max(self.clock.get_time(), 1)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_ESCAPE:
-                    self.draw_mode = (self.draw_mode + 1) % 4
-                    print("print drawmode: ", self.draw_mode)
-                # if event.key == pygame.K_p:
-                #     self.save()
-                #     self.running = False
-                #     self.shutdown = True
 
         self.action = action  # self.robot.do_action()
 
         throttle = 0
-        if keys[pygame.K_w] or self.action == 0:
+        if self.action == 0:
             throttle = 100
-        if keys[pygame.K_d] or self.action == 1:
+        if self.action == 1:
             car.steer(-1, delta)
-        if keys[pygame.K_a] or self.action == 2:
+        if self.action == 2:
             car.steer(1, delta)
-        if keys[pygame.K_s] or self.action == 3:
+        if self.action == 3:
             throttle = -100
         if self.action == 4:
             throttle = 100
@@ -277,7 +266,7 @@ class Game(object):
             for checkpoint in self.checkpoints:
                 pygame.draw.lines(self.screen, (130, 130, 130), False, (checkpoint[0], checkpoint[1]), 2)
 
-        text = self.font.render("Generation: " + str(generation) + "     Max steps: " + str(max_steps), True, (255, 255, 255))
+        text = self.font.render("Generation: " + str(generation + start_generation) + "     Max steps: " + str(max_steps), True, (255, 255, 255))
         self.screen.blit(text, (0, 0))
 
         # self.robot.update(self.reward, self.detected_points, self.progress, round(self.car.speed, 3))
@@ -345,15 +334,15 @@ class Game(object):
         # f.close()
 
 
-def fitness_func(genomes, config):
-    global generation
+def fitness_func(genomes, config, best):
+    global generation, show_best
     generation += 1
     nets = []
     ge = []
     cars = []
 
     for _, g in genomes:
-        net = neat.nn.FeedForwardNetwork.create(g, config)
+        net = neatfast.nn.FeedForwardNetwork.create(g, config)
         nets.append(net)
         cars.append((Car(520, 650, 270), 1, -1, 0))
         g.fitness = 0
@@ -363,23 +352,33 @@ def fitness_func(genomes, config):
     g = Game((1024, 768), None)
     clock = pygame.time.Clock()
     death_positions = []
-    max_steps = 60 + (int(generation / 5) * 15)
-    print(max_steps)
+    max_steps = 60 + (int((generation + start_generation) / 5) * 15)
     step = 0
     while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    show_best = not show_best
+
         step += 1
         all_fitness = []
-        for genome in ge:
+        for i, genome in enumerate(ge):
             all_fitness.append(genome.fitness)
         clock.tick()
         draw_info = []
         for x, car in enumerate(cars):
             inputs, done, checkpoint, progress, car_image, rect, steps, hitbox, lines = g.parse_events(car[0], car[1], car[2], car[3])
             # if x == np.argmax(all_fitness):
-            draw_info.append((car_image, car[0], rect, hitbox, lines))
+            if x == 0 and show_best:
+                draw_info.append((car_image, car[0], rect, hitbox, lines))
+            elif not show_best:
+                draw_info.append((car_image, car[0], rect, hitbox, lines))
 
             if done:
-                ge[x].fitness -= 3
+                penalty = 2
+                ge[x].fitness -= penalty
                 nets.pop(x)
                 ge.pop(x)
                 cars.pop(x)
@@ -412,20 +411,25 @@ def fitness_func(genomes, config):
 
 
 generation = -1
+start_generation = 129
+show_best = False
 
 
 def run(config_path):
-    config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction,
-                                neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
+    config = neatfast.config.Config(neatfast.DefaultGenome, neatfast.DefaultReproduction,
+                                neatfast.DefaultSpeciesSet, neatfast.DefaultStagnation, config_path)
 
-    p = neat.Population(config)
+    # p = neatfast.Population(config)
+    p = neatfast.Checkpointer(5).restore_checkpoint("saves/generation-129")
 
-    p.add_reporter(neat.StdOutReporter(True))
-    stats = neat.StatisticsReporter
+    p.add_reporter(neatfast.Checkpointer(5, 300, "saves/generation-"))
+
+    p.add_reporter(neatfast.StdOutReporter(True))
+    stats = neatfast.StatisticsReporter
     # p.add_reporter(stats)
 
     winner = p.run(fitness_func)
-    net = neat.nn.FeedForwardNetwork.create(winner, config)
+    net = neatfast.nn.FeedForwardNetwork.create(winner, config)
     clock = pygame.time.Clock()
 
     while 1:
@@ -450,7 +454,7 @@ def run(config_path):
             output = net.activate(inputs)
             action = np.argmax(output)
             car = (car[0], progress, action, steps)
-            g.draw(draw_info, -1, [])
+            g.draw(draw_info, -1, [], -1)
 
 
 if __name__ == "__main__":
